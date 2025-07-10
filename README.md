@@ -1,70 +1,97 @@
-# Getting Started with Create React App
+# DeepFake Detection Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack platform for detecting DeepFake videos using deep learning. This project combines a PyTorch-based backend for video analysis and a React-based frontend for user interaction.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🏗️ Project Architecture
 
-### `npm start`
+![System Architecture](src/assets/architecture.png)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🚀 Features
+- **End-to-end DeepFake detection**: Upload a video and get a real/fake prediction with confidence.
+- **Preprocessing pipeline**: Extracts frame-level features using ResNeXt50.
+- **Temporal modeling**: LSTM classifier learns temporal patterns in video frames.
+- **Modern UI**: React frontend for easy video upload and result visualization.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📂 Dataset
+- **Celeb-DF v2**: Used for training and evaluation.
+- Place videos in `data/Celeb-real/` (real) and `data/Celeb-synthesis/` (fake).
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🗂️ File & Folder Roles
+- `full_pipeline.py`: Complete pipeline for feature extraction, dataset building, LSTM training, and prediction.
+- `app.py`: Flask backend serving the prediction API for the frontend.
+- `src/`: React frontend source code.
+- `src/assets/architecture.png`: System architecture diagram.
+- `features/`: Stores extracted features and `index.txt` (created at runtime).
+- `models/`: Stores trained LSTM model (`lstm_model.pt`, created at runtime).
+- `data/`: Place your dataset here (see above).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## ⚙️ Setup Instructions
 
-### `npm run eject`
+### 1. Python Backend (Flask + PyTorch)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+#### a. Install dependencies
+```bash
+pip install torch torchvision flask flask-cors numpy pillow opencv-python
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### b. Prepare dataset
+- Download [Celeb-DF v2](https://github.com/yuezunli/celeb-deepfakeforensics) and organize as:
+  - `data/Celeb-real/` (real videos)
+  - `data/Celeb-synthesis/` (fake videos)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+#### c. Run the pipeline (feature extraction + training)
+```bash
+python full_pipeline.py
+```
+- This will extract features, build the dataset, train the LSTM, and save the model to `models/lstm_model.pt`.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+#### d. Start the backend server
+```bash
+python app.py
+```
+- The Flask server will run at `http://127.0.0.1:5000/`
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 2. React Frontend
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### a. Install dependencies
+```bash
+cd src
+npm install
+```
 
-### Code Splitting
+#### b. Start the frontend
+```bash
+npm start
+```
+- The app will run at `http://localhost:3000/`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+## 🧪 Usage
+1. Open the frontend in your browser.
+2. Upload an MP4 video.
+3. Click "Predict" to get the result (Real/Fake + confidence score).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## 📜 Credits
+- **Dataset**: [Celeb-DF v2](https://github.com/yuezunli/celeb-deepfakeforensics)
+- **Backbone**: ResNeXt50 (PyTorch)
+- **Frontend**: React
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 📬 Contact
+For questions or contributions, open an issue or pull request on GitHub.
